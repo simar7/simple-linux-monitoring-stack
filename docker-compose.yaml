@@ -1,0 +1,21 @@
+services:
+  process-exporter:
+    volumes:
+      - .:/config
+      - /proc:/host/proc
+    image: ncabatoff/process-exporter:0.7.5
+    command: "--procfs /host/proc -config.path /config/process-exporter.yaml"
+    privileged: true
+    ports:
+    - 9256:9256
+  prometheus:
+    volumes:
+    - .:/config
+    image: prom/prometheus:v2.28.1
+    command: "--config.file /config/prometheus.yaml"
+    ports:
+      - 9090:9090
+  graphana:
+    image: grafana/grafana:8.0.5
+    ports:
+    - 3000:3000
